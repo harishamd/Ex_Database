@@ -35,6 +35,7 @@ public class TUBES_SBD {
     
     //Objek untuk JSON Converter
     static ArrayList<String> data = new ArrayList<String>();
+    static ArrayList<String> tamu = new ArrayList<String>();
     static PreparedStatement ps = null;
     static String path = "Pegawai.txt"; //Export file, Ekstensi bisa diubah, jadi .txt bisa, .json bisa, dll
     static String driver="com.mysql.jdbc.Driver";
@@ -125,8 +126,8 @@ public class TUBES_SBD {
     
     @SuppressWarnings({ "unchecked" })
     public static void dataLoadTamu(String pathtamu) {
-        JSONObject obj1 = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
+        JSONObject obj1tamu = new JSONObject();
+        JSONArray jsonArraytamu = new JSONArray();
         conn = koneksi.getDbConnection(driver, urltamu, username,
                 password);
         try {
@@ -141,33 +142,33 @@ public class TUBES_SBD {
                     columnNames.add(columns.getColumnName(i));
                 }
                 while (rs.next()) {
-                    JSONObject obj = new JSONObject();
+                    JSONObject objtamu = new JSONObject();
                     for (i = 0; i < columnNames.size(); i++) {
-                        data.add(rs.getString(columnNames.get(i)));
+                        tamu.add(rs.getString(columnNames.get(i)));
                         {
-                            for (int j = 0; j < data.size(); j++) {
-                                if (data.get(j) != null) {
-                                    obj.put(columnNames.get(i), data.get(j));
+                            for (int j = 0; j < tamu.size(); j++) {
+                                if (tamu.get(j) != null) {
+                                    objtamu.put(columnNames.get(i), tamu.get(j));
                                 }else {
-                                    obj.put(columnNames.get(i), "");
+                                    objtamu.put(columnNames.get(i), "");
                                 }
                             }
                         }
                     }
 
-                    jsonArray.add(obj);
-                    obj1.put("Tamu", jsonArray);
+                    jsonArraytamu.add(objtamu);
+                    obj1tamu.put("Tamu", jsonArraytamu);
                     FileWriter file = new FileWriter(pathtamu);
-                    file.write(obj1.toJSONString());
+                    file.write(obj1tamu.toJSONString());
                     file.flush();
                     file.close();
                 }
                 ps.close();
             } else {
-                JSONObject obj2 = new JSONObject();
-                obj2.put(null, null);
-                jsonArray.add(obj2);
-                obj1.put("Tamu", jsonArray);
+                JSONObject obj2tamu = new JSONObject();
+                obj2tamu.put(null, null);
+                jsonArraytamu.add(obj2tamu);
+                obj1tamu.put("Tamu", jsonArraytamu);
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -489,7 +490,7 @@ public class TUBES_SBD {
             // hapus data
             stmt.execute(sqll);
             
-            System.out.println("Data Pegawai Sudah Dihapus...");
+            System.out.println("Data Tamu Sudah Dihapus...");
         } catch (Exception e) {
             e.printStackTrace();
         }
